@@ -18,4 +18,22 @@ class AssetCacheTest:XCTestCase{
     override class func setUp() {
         sut = AssetCache(name: Values.cacheName, config: AssetCache.Configuration(maxCapacity: Values.cacheCapacity))
     }
+    
+    func test_cacheInsertOneObjectAndRetrieveOneObject(){
+        
+        sut.set(object: Values.randomCacheData, for: Values.testCacheID)
+        
+        let returnedObject = sut.getObject(for: Values.testCacheID)
+        
+        XCTAssertEqual(Values.randomCacheData, returnedObject?.value)
+    }
+    
+    func test_CacheRemovesExpiredObjects(){
+        let assetObject = AssetCache.AssetCacheObject(value: Values.randomCacheData, expiration: .distantPast)
+        sut.set(object: assetObject, for:Values.testCacheID)
+        let returnedObject = sut.getObject(for: Values.testCacheID)
+        XCTAssertNil(returnedObject)
+    }
+    
+    
 }

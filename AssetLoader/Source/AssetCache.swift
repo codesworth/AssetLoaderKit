@@ -28,12 +28,16 @@ class AssetCache {
     
     
     
-    func set(object:Data, for key:String){
+    public func set(object:Data, for key:String){
         let assetObject = AssetCacheObject(value: object, expiration: Date().addingTimeInterval(secondsInOneDay))
-        cache.setObject(assetObject, forKey: key as NSString)
+        set(object: assetObject, for: key)
     }
     
-    func getObject(for key:String)->AssetCacheObject?{
+    public func set(object:AssetCacheObject, for key:String){
+        cache.setObject(object, forKey: key as NSString)
+    }
+    
+    public func getObject(for key:String)->AssetCacheObject?{
         let key = key as NSString
         guard let object = cache.object(forKey: key) else{
             return nil

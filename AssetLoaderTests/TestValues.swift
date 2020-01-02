@@ -14,4 +14,6 @@ enum Values {
     static let badUrl = "https://image.unsplash.com/photo-1464550883968-cec281c19761"
     static let cacheName = "test_cache"
     static let cacheCapacity = 10
+    static let randomCacheData = Data(repeating: 0, count: 100)
+    static let testCacheID = "test_id"
 }
