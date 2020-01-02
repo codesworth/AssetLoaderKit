@@ -20,7 +20,7 @@ class AssetDownloader{
     }
     
     @discardableResult
-    func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloaderTask{
+    func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloadTask{
         let request = URLRequest(url: url)
         let dataTask = session.downloadTask(with: request) { (url, _, err) in
             guard let url = url else {

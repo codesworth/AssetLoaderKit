@@ -1,15 +1,15 @@
 //
 //  AssetManagerTest.swift
-//  AssetLoaderKitTests
+//  AssetLoaderTests
 //
 //  Created by Shadrach Mensah on 01/01/2020.
 //  Copyright © 2020 Shadrach Mensah. All rights reserved.
 //
 
 import XCTest
-@testable import AssetLoaderKit
+@testable import AssetLoader
 
-class AssetManagerTest: XCTestCase {
+class AssetDownloaderTest: XCTestCase {
 
     func test_downloadFromWorkingUrlWorks(){
         let sut = AssetDownloader()
@@ -30,7 +30,7 @@ class AssetManagerTest: XCTestCase {
     }
     
     func test_downloadFromWrongUrlDoesntWork(){
-        let sut = AssetManager()
+        let sut = AssetDownloader()
         let url = URL(string:Values.badUrl)!
         var expected:Data? = nil
         let expectation = self.expectation(description: "imageDownload")
