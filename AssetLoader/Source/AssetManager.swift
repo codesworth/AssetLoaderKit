@@ -9,12 +9,12 @@
 import UIKit
 
 
-class AssetManager{
+open class AssetManager{
     
     let downloader:AssetDownloader = AssetDownloader()
     let mainCache = AssetCache.main
     
-    typealias Operation = () -> Void
+    public typealias Operation = () -> Void
     
     func performOnManQueue(_ block:@escaping Operation){
         DispatchQueue.main.async {block()}

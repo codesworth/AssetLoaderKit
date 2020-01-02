@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct NetworkError:Error, ExpressibleByStringLiteral {
+public struct NetworkError:Error, ExpressibleByStringLiteral {
     
-    init(stringLiteral value: String) {
+    public init(stringLiteral value: String) {
         localizedDescription = value
     }
-    var localizedDescription: String
+    public var localizedDescription: String
     
     init(_ err:Error?) {
         localizedDescription = err?.localizedDescription ?? "unknown Error occurred"

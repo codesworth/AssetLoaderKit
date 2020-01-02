@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AssetCache {
+open class AssetCache {
     
     static private(set) var main = AssetCache(name: "mainCache",config: Configuration())
     
@@ -33,11 +33,11 @@ class AssetCache {
         set(object: assetObject, for: key)
     }
     
-    public func set(object:AssetCacheObject, for key:String){
+    func set(object:AssetCacheObject, for key:String){
         cache.setObject(object, forKey: key as NSString)
     }
     
-    public func getObject(for key:String)->AssetCacheObject?{
+    func getObject(for key:String)->AssetCacheObject?{
         let key = key as NSString
         guard let object = cache.object(forKey: key) else{
             return nil

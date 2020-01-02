@@ -46,5 +46,9 @@ class AssetDownloaderTest: XCTestCase {
         waitForExpectations(timeout: 30, handler: nil)
         XCTAssertNil(expected)
     }
+    
+    func test_ok(){
+        
+    }
 
 }
