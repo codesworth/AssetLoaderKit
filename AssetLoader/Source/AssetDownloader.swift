@@ -15,8 +15,8 @@ class AssetDownloader{
     
     let session:URLSession
     
-    init() {
-        session = URLSession(configuration: .ephemeral)
+    init(session:URLSession) {
+        self.session = session
     }
     
     @discardableResult
@@ -25,6 +25,7 @@ class AssetDownloader{
         
         let dataTask = session.downloadTask(with: request) { (url, _, err) in
             guard let url = url else {
+                AssetLoaderLogger.log(err: NetworkError(err), in: #function)
                 completion(.failure(NetworkError(err)))
                 return
             }
@@ -32,6 +33,7 @@ class AssetDownloader{
                 let data = try Data(contentsOf: url)
                 completion(.success(data))
             }catch let err{
+                AssetLoaderLogger.log(err: err, in: #function)
                 completion(.failure(NetworkError(err)))
             }
         }
@@ -44,6 +46,7 @@ class AssetDownloader{
         let data = task.resumeData
         session.downloadTask(withResumeData: data) { (url, _, err) in
             guard let url = url else {
+                AssetLoaderLogger.log(err:NetworkError(err), in: #function)
                 completion(.failure(NetworkError(err)))
                 return
             }
@@ -51,6 +54,7 @@ class AssetDownloader{
                 let data = try Data(contentsOf: url)
                 completion(.success(data))
             }catch let err{
+                AssetLoaderLogger.log(err: err, in: #function)
                 completion(.failure(NetworkError(err)))
             }
         }

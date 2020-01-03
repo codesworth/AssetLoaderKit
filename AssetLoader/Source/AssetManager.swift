@@ -11,7 +11,7 @@ import UIKit
 
 open class AssetManager:NSObject{
     
-    let downloader:AssetDownloader = AssetDownloader()
+    private var downloader:AssetDownloader!
     var mainCache = AssetCache.main
     
     
@@ -24,6 +24,9 @@ open class AssetManager:NSObject{
     var currentTasks:[Int:AssetDownloadTask] = [:]
     
     public init(with cache:AssetCache? = nil) {
+        super.init()
+        let session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .current)
+        downloader = AssetDownloader(session: session)
         if let cache = cache{
             mainCache = cache
         }
@@ -75,7 +78,7 @@ open class AssetManager:NSObject{
     func resolve(url:URL, result:AssetDownloader.AssetResult, completion:@escaping ImageCompletionHandler){
         switch result{
         case .failure(let err):
-            AssetLoaderLogger.log(err: err, in: "AssetManager.downloadImage")
+            AssetLoaderLogger.log(err: err, in: #function)
             self.performOnManQueue {completion(nil,err)}
             break
         case .success(let data):
@@ -104,7 +107,7 @@ open class AssetManager:NSObject{
                 let codable = try decoder.decode(type, from: data)
                 completion(codable,nil)
             } catch let err {
-                AssetLoaderLogger.log(err: err, in: "AssetManager.download(from:for:completion)")
+                AssetLoaderLogger.log(err: err, in: #function)
                 completion(nil,err)
             }
         }else{
@@ -112,7 +115,7 @@ open class AssetManager:NSObject{
                 guard let self = self else {return}
                 switch result{
                 case .failure(let err):
-                    AssetLoaderLogger.log(err: err, in: "AssetManager.download(from:for:completion)")
+                    AssetLoaderLogger.log(err: err, in:#function)
                     self.performOnManQueue {completion(nil,err)}
                     break
                 case .success(let data):

@@ -33,9 +33,3 @@ open class AssetDownloadTask:NSObject{
 }
 
 
-extension AssetDownloadTask: URLSessionDataDelegate{
-    
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        resumeData.append(data)
-    }
-}
