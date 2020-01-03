@@ -22,6 +22,7 @@ class AssetDownloader{
     @discardableResult
     func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloadTask{
         let request = URLRequest(url: url)
+        
         let dataTask = session.downloadTask(with: request) { (url, _, err) in
             guard let url = url else {
                 completion(.failure(NetworkError(err)))
@@ -38,4 +39,24 @@ class AssetDownloader{
         task.resume()
         return task
     }
+    
+    func resumeDownload(with task:AssetDownloadTask, completion:@escaping AssetDownloadCompletionHandler){
+        let data = task.resumeData
+        session.downloadTask(withResumeData: data) { (url, _, err) in
+            guard let url = url else {
+                completion(.failure(NetworkError(err)))
+                return
+            }
+            do{
+                let data = try Data(contentsOf: url)
+                completion(.success(data))
+            }catch let err{
+                completion(.failure(NetworkError(err)))
+            }
+        }
+    }
 }
+
+
+
+

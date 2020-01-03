@@ -10,6 +10,7 @@ import Foundation
 
 
 enum Values {
+    static let pinUrl = "http://pastebin.com/raw/wgkJgazE"
     static let workingUrl = "https://images.unsplash.com/photo-1464550883968-cec281c19761"
     static let badUrl = "https://image.unsplash.com/photo-1464550883968-cec281c19761"
     static let cacheName = "test_cache"

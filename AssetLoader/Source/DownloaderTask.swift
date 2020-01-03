@@ -9,15 +9,19 @@
 import Foundation
 
 
-open class AssetDownloadTask{
+open class AssetDownloadTask:NSObject{
     
+
     let task:URLSessionDownloadTask
     
-    let identifier:Int = 0
+    
+    var resumeData:Data
     
     init(task:URLSessionDownloadTask) {
         self.task = task
+        resumeData = Data()
     }
+    
     
     public func resume(){
         task.resume()
@@ -25,5 +29,13 @@ open class AssetDownloadTask{
     
     public func cancel(){
         task.cancel()
+    }
+}
+
+
+extension AssetDownloadTask: URLSessionDataDelegate{
+    
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        resumeData.append(data)
     }
 }

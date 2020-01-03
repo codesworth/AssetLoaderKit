@@ -32,4 +32,24 @@ class AssetManagerTest:XCTestCase{
     func makeUrlFrom(_ string:String)->URL{
         return URL(string: string)!
     }
+    
+    
+    func test_ManagerDownloadsAndCachesJSONData(){
+        var expectedData:[MockPin] = []
+        
+        let expectation = self.expectation(description: "test2")
+        sut.download(from: URL(string: Values.pinUrl)!, for: [MockPin].self) { (data, err) in
+            if let data = data{
+                expectedData = data
+            }
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertFalse(expectedData.isEmpty)
+    }
+    
+    struct MockPin:Codable {
+        let id:String
+        let color:String
+    }
 }

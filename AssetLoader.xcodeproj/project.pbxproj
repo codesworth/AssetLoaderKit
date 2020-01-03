@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		382FF74223BEC54D004DCF5A /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382FF74123BEC54D004DCF5A /* UIImageView+Extension.swift */; };
 		385811F923BD77B2002CC9B0 /* AssetLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 385811EF23BD77B2002CC9B0 /* AssetLoader.framework */; };
 		3858120023BD77B2002CC9B0 /* AssetLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 385811F223BD77B2002CC9B0 /* AssetLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3858120F23BD77DE002CC9B0 /* AssetDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858120A23BD77DE002CC9B0 /* AssetDownloader.swift */; };
 		3858121023BD77DE002CC9B0 /* AssetCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858120B23BD77DE002CC9B0 /* AssetCache.swift */; };
-		3858121123BD77DE002CC9B0 /* AssetCacheObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858120C23BD77DE002CC9B0 /* AssetCacheObject.swift */; };
 		3858121223BD77DE002CC9B0 /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858120D23BD77DE002CC9B0 /* AssetManager.swift */; };
 		3858121323BD77DE002CC9B0 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858120E23BD77DE002CC9B0 /* NetworkError.swift */; };
 		3858121523BDF1DB002CC9B0 /* DownloaderTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121423BDF1DB002CC9B0 /* DownloaderTask.swift */; };
@@ -19,6 +19,7 @@
 		3858121923BE028F002CC9B0 /* AssetDownloaderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */; };
 		3858121B23BE03BF002CC9B0 /* AssetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */; };
 		3858121D23BE0605002CC9B0 /* AssetCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */; };
+		38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		382FF74123BEC54D004DCF5A /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		385811EF23BD77B2002CC9B0 /* AssetLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AssetLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		385811F223BD77B2002CC9B0 /* AssetLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetLoader.h; sourceTree = "<group>"; };
 		385811F323BD77B2002CC9B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,7 +41,6 @@
 		385811FF23BD77B2002CC9B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3858120A23BD77DE002CC9B0 /* AssetDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetDownloader.swift; sourceTree = "<group>"; };
 		3858120B23BD77DE002CC9B0 /* AssetCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCache.swift; sourceTree = "<group>"; };
-		3858120C23BD77DE002CC9B0 /* AssetCacheObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetCacheObject.swift; sourceTree = "<group>"; };
 		3858120D23BD77DE002CC9B0 /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		3858120E23BD77DE002CC9B0 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		3858121423BDF1DB002CC9B0 /* DownloaderTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderTask.swift; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 		3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetDownloaderTest.swift; sourceTree = "<group>"; };
 		3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManagerTests.swift; sourceTree = "<group>"; };
 		3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCacheTest.swift; sourceTree = "<group>"; };
+		38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetLoaderLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		382FF74023BEC51D004DCF5A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				382FF74123BEC54D004DCF5A /* UIImageView+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		385811E523BD77B1002CC9B0 = {
 			isa = PBXGroup;
 			children = (
@@ -111,12 +121,13 @@
 		3858120923BD77DD002CC9B0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				382FF74023BEC51D004DCF5A /* Extensions */,
 				3858120A23BD77DE002CC9B0 /* AssetDownloader.swift */,
 				3858120B23BD77DE002CC9B0 /* AssetCache.swift */,
-				3858120C23BD77DE002CC9B0 /* AssetCacheObject.swift */,
 				3858120D23BD77DE002CC9B0 /* AssetManager.swift */,
 				3858120E23BD77DE002CC9B0 /* NetworkError.swift */,
 				3858121423BDF1DB002CC9B0 /* DownloaderTask.swift */,
+				38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -233,9 +244,10 @@
 			files = (
 				3858121223BD77DE002CC9B0 /* AssetManager.swift in Sources */,
 				3858120F23BD77DE002CC9B0 /* AssetDownloader.swift in Sources */,
-				3858121123BD77DE002CC9B0 /* AssetCacheObject.swift in Sources */,
+				382FF74223BEC54D004DCF5A /* UIImageView+Extension.swift in Sources */,
 				3858121523BDF1DB002CC9B0 /* DownloaderTask.swift in Sources */,
 				3858121023BD77DE002CC9B0 /* AssetCache.swift in Sources */,
+				38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */,
 				3858121323BD77DE002CC9B0 /* NetworkError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

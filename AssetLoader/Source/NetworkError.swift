@@ -15,7 +15,7 @@ public struct NetworkError:Error, ExpressibleByStringLiteral {
     }
     public var localizedDescription: String
     
-    init(_ err:Error?) {
+    public init(_ err:Error?) {
         localizedDescription = err?.localizedDescription ?? "unknown Error occurred"
     }
 }

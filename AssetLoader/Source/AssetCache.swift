@@ -73,7 +73,6 @@ extension AssetCache{
     
     struct Configuration {
         let maxCapacity:Int
-        //let maxMemoryCapacity
         
         init(maxCapacity:Int = 20) {
             self.maxCapacity = maxCapacity

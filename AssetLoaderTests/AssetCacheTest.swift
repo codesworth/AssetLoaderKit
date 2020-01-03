@@ -13,14 +13,14 @@ import XCTest
 
 class AssetCacheTest:XCTestCase{
     
-    var sut:AssetCache!
+    //var sut:AssetCache!
     
     override class func setUp() {
-        sut = AssetCache(name: Values.cacheName, config: AssetCache.Configuration(maxCapacity: Values.cacheCapacity))
+        //sut = AssetCache(name: Values.cacheName, config: AssetCache.Configuration(maxCapacity: Values.cacheCapacity))
     }
     
     func test_cacheInsertOneObjectAndRetrieveOneObject(){
-        
+        let sut = AssetCache(name: Values.cacheName, config: AssetCache.Configuration(maxCapacity: Values.cacheCapacity))
         sut.set(object: Values.randomCacheData, for: Values.testCacheID)
         
         let returnedObject = sut.getObject(for: Values.testCacheID)
@@ -29,6 +29,7 @@ class AssetCacheTest:XCTestCase{
     }
     
     func test_CacheRemovesExpiredObjects(){
+        let sut = AssetCache(name: Values.cacheName, config: AssetCache.Configuration(maxCapacity: Values.cacheCapacity))
         let assetObject = AssetCache.AssetCacheObject(value: Values.randomCacheData, expiration: .distantPast)
         sut.set(object: assetObject, for:Values.testCacheID)
         let returnedObject = sut.getObject(for: Values.testCacheID)

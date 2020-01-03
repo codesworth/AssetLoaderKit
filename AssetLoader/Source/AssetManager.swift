@@ -9,19 +9,24 @@
 import UIKit
 
 
-open class AssetManager{
+open class AssetManager:NSObject{
     
     let downloader:AssetDownloader = AssetDownloader()
-    let mainCache = AssetCache.main
+    var mainCache = AssetCache.main
+    
     
     public typealias Operation = () -> Void
-    
+    public typealias ImageCompletionHandler = (UIImage?,Error?)->Void
     func performOnManQueue(_ block:@escaping Operation){
         DispatchQueue.main.async {block()}
     }
     
-    public init() {
-       
+    var currentTasks:[Int:AssetDownloadTask] = [:]
+    
+    public init(with cache:AssetCache? = nil) {
+        if let cache = cache{
+            mainCache = cache
+        }
     }
     
     func getFromCache(_ key:String)->Data?{
@@ -39,15 +44,50 @@ open class AssetManager{
         }
         downloader.download(from: url) {[weak self] result in
             guard let self = self else {return}
-            switch result{
-            case .failure(let err):
-                self.performOnManQueue {completion(nil,err)}
-                break
-            case .success(let data):
-                self.mainCache.set(object: data, for: url.absoluteString)
-                let image = UIImage(data: data)
-                self.performOnManQueue {completion(image,nil)}
-            }
+            self.resolve(url: url, result: result, completion: completion)
+        }
+    }
+    
+    /// Used For Downloading UIImage
+    /// - Parameters:
+    ///  - url: url of the data to be downloaded
+    ///  - identifier:Int A specified id for the download. Helpful for resuming after cancellation
+    ///  -  completion: Completion blocked passes in the codable type if any and an optional error
+    
+    public func downloadImage(for url:URL, identifier:Int, completion:@escaping ImageCompletionHandler){
+        if let data = getFromCache(url.absoluteString){
+            completion(UIImage(data: data),nil)
+            return
+        }
+        if let task = currentTasks[identifier]{
+            resumeDownloadFor(task: task, url: url, completion: completion)
+            return
+        }
+        let task = downloader.download(from: url) {[weak self] result in
+            guard let self = self else {return}
+            self.currentTasks.removeValue(forKey: identifier)
+            
+        }
+        currentTasks.updateValue(task, forKey: identifier)
+    }
+    
+    
+    func resolve(url:URL, result:AssetDownloader.AssetResult, completion:@escaping ImageCompletionHandler){
+        switch result{
+        case .failure(let err):
+            AssetLoaderLogger.log(err: err, in: "AssetManager.downloadImage")
+            self.performOnManQueue {completion(nil,err)}
+            break
+        case .success(let data):
+            self.mainCache.set(object: data, for: url.absoluteString)
+            let image = UIImage(data: data)
+            self.performOnManQueue {completion(image,nil)}
+        }
+    }
+    
+    func resumeDownloadFor(task:AssetDownloadTask, url:URL, completion:@escaping ImageCompletionHandler){
+        downloader.resumeDownload(with: task) {[weak self] result in
+            self?.resolve(url:url, result: result, completion: completion)
         }
     }
     
@@ -57,13 +97,14 @@ open class AssetManager{
     ///  - url: url of the data to be downloaded
     ///  - type: The Explicit type of the Codable Data Type
     ///  -  completion: Completion blocked passes in the codable type if any and an optional error
-    func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type,    completion:@escaping (AnyCodable?, Error?) -> Void){
+    public func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type,    completion:@escaping (AnyCodable?, Error?) -> Void){
         if let data = getFromCache(url.absoluteString){
             do {
                 let decoder = JSONDecoder()
                 let codable = try decoder.decode(type, from: data)
                 completion(codable,nil)
             } catch let err {
+                AssetLoaderLogger.log(err: err, in: "AssetManager.download(from:for:completion)")
                 completion(nil,err)
             }
         }else{
@@ -71,6 +112,7 @@ open class AssetManager{
                 guard let self = self else {return}
                 switch result{
                 case .failure(let err):
+                    AssetLoaderLogger.log(err: err, in: "AssetManager.download(from:for:completion)")
                     self.performOnManQueue {completion(nil,err)}
                     break
                 case .success(let data):
@@ -109,5 +151,13 @@ open class AssetManager{
         
     }
     
+}
+
+
+extension AssetManager:URLSessionDataDelegate{
     
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        guard let url = dataTask.originalRequest?.url, let task = currentTasks.first(where: {$1.task.originalRequest?.url == url}) else{return}
+        task.value.resumeData.append(data)
+    }
 }
