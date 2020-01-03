@@ -19,7 +19,7 @@ public struct Cursor{
     var range:CountableRange<Int>
     public var rotations:Int = 0
     
-    init(limit:Int,sortOrder:@escaping SortOrder) {
+    public init(limit:Int,sortOrder:@escaping SortOrder) {
         self.limit = limit
         self.sortOrder = sortOrder
         range = 0..<limit
