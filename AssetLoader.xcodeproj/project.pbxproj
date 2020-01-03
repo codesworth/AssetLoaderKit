@@ -20,6 +20,7 @@
 		3858121B23BE03BF002CC9B0 /* AssetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */; };
 		3858121D23BE0605002CC9B0 /* AssetCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */; };
 		38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */; };
+		38CB96E323BF7F0800A861AB /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB96E223BF7F0800A861AB /* Cursor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManagerTests.swift; sourceTree = "<group>"; };
 		3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCacheTest.swift; sourceTree = "<group>"; };
 		38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetLoaderLogger.swift; sourceTree = "<group>"; };
+		38CB96E223BF7F0800A861AB /* Cursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				3858120E23BD77DE002CC9B0 /* NetworkError.swift */,
 				3858121423BDF1DB002CC9B0 /* DownloaderTask.swift */,
 				38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */,
+				38CB96E223BF7F0800A861AB /* Cursor.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				382FF74223BEC54D004DCF5A /* UIImageView+Extension.swift in Sources */,
 				3858121523BDF1DB002CC9B0 /* DownloaderTask.swift in Sources */,
 				3858121023BD77DE002CC9B0 /* AssetCache.swift in Sources */,
+				38CB96E323BF7F0800A861AB /* Cursor.swift in Sources */,
 				38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */,
 				3858121323BD77DE002CC9B0 /* NetworkError.swift in Sources */,
 			);

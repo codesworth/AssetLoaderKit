@@ -99,13 +99,14 @@ open class AssetManager:NSObject{
     /// - Parameters:
     ///  - url: url of the data to be downloaded
     ///  - type: The Explicit type of the Codable Data Type
+    ///  - cursor: A Cursor for sorting and fetching data in batches. Defaults to nil, all data is return instead
     ///  -  completion: Completion blocked passes in the codable type if any and an optional error
-    public func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type,    completion:@escaping (AnyCodable?, Error?) -> Void){
+    public func download<AnyCodable:Codable, CursorObject:Codable>(from url:URL,for type:AnyCodable.Type,with cursor:Cursor<CursorObject>? = nil, completion:@escaping (AnyCodable?, Error?) -> Void){
         if let data = getFromCache(url.absoluteString){
             do {
                 let decoder = JSONDecoder()
                 let codable = try decoder.decode(type, from: data)
-                completion(codable,nil)
+                self.finishCompletion(cursor: cursor, from: codable, completion: completion)
             } catch let err {
                 AssetLoaderLogger.log(err: err, in: #function)
                 completion(nil,err)
@@ -132,6 +133,45 @@ open class AssetManager:NSObject{
         }
     }
     
+    
+    func finishCompletion<AnyCodable:Codable, CursorObject:Codable>(cursor:Cursor<CursorObject>?,from bulkData:AnyCodable, completion:@escaping (AnyCodable?, Error?) -> Void){
+        if let cursor = cursor{
+            guard let data = getDatawith(cursor: cursor, from: bulkData) else {
+                performOnManQueue {completion(nil,nil)}
+                return
+            }
+            performOnManQueue {completion(data,nil)}
+        }else{
+            performOnManQueue {completion(bulkData,nil)}
+        }
+    }
+    
+    
+    func getDatawith<AnyCodable:Codable, CursorObject:Codable>(cursor:Cursor<CursorObject>,from bulkData:AnyCodable)->AnyCodable?{
+        guard let bulk = bulkData as? Array<Codable> else {return bulkData}
+        let sorted = bulk.sorted {
+            if let first = $0 as? CursorObject, let second = $1 as? CursorObject{
+                return cursor.sortOrder(first,second)
+            }
+            return false
+        }
+        if cursor.range.endIndex < sorted.count{
+            let start = cursor.range.startIndex
+            let end = cursor.range.endIndex
+            if let result = Array(sorted[start..<end]) as? AnyCodable{
+                return result
+            }else{
+              return nil
+            }
+        }else{
+            guard cursor.range.startIndex < sorted.count else {return nil }
+            if let result = sorted[cursor.range.startIndex...] as? AnyCodable{
+                return result
+            }
+            return nil
+        }
+    }
+    
     /// Used For Downloading Images From multiple Sources in parallel
     /// - Parameters:
     ///  - urls: Array of urls to download from
@@ -152,6 +192,12 @@ open class AssetManager:NSObject{
             }
         }
         
+    }
+    
+    public func cancel(for identifier:Int){
+        if let task = currentTasks[identifier]{
+            task.cancel()
+        }
     }
     
 }
