@@ -9,12 +9,15 @@
 import Foundation
 
 
-public struct Cursor<Object:Codable>{
+/// A Simple structure to encapsulate pagination feature of this loader API
+/// This enables user to flexibly provide custom sort Operations whiles abstracting away the details of fetching actaul data
+public struct Cursor{
     
-    public typealias SortOrder = (Object,Object) -> Bool
+    public typealias SortOrder = (Any,Any) -> Bool
     let limit:Int
     let sortOrder:SortOrder
     var range:CountableRange<Int>
+    public var rotations:Int = 0
     
     init(limit:Int,sortOrder:@escaping SortOrder) {
         self.limit = limit
@@ -22,8 +25,17 @@ public struct Cursor<Object:Codable>{
         range = 0..<limit
     }
     
+    public var startIndex:Int{
+        return range.startIndex
+    }
+    
+    public var endIndex:Int{
+        return range.endIndex
+    }
+    
     public mutating func next(){
         range = range.endIndex..<range.endIndex.advanced(by: limit)
+        rotations += 1
     }
     
 }

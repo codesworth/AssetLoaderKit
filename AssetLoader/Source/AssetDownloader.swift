@@ -8,10 +8,10 @@
 
 import Foundation
 
-class AssetDownloader{
+
+
+class AssetDownloader:AssetDownloaderProtocol{
     
-    typealias AssetResult = Result<Data,NetworkError>
-    typealias AssetDownloadCompletionHandler = (AssetResult) -> ()
     
     let session:URLSession
     
@@ -20,7 +20,7 @@ class AssetDownloader{
     }
     
     @discardableResult
-    func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloadTask{
+    func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloaderTaskProtocol{
         let request = URLRequest(url: url)
         
         let dataTask = session.downloadTask(with: request) { (url, _, err) in

@@ -9,17 +9,17 @@
 import Foundation
 
 
-open class AssetDownloadTask:NSObject{
+open class AssetDownloadTask:NSObject, AssetDownloaderTaskProtocol{
     
 
     let task:URLSessionDownloadTask
     
     
-    var resumeData:Data
+    public var resumeData = Data()
     
     init(task:URLSessionDownloadTask) {
         self.task = task
-        resumeData = Data()
+        
     }
     
     

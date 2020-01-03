@@ -48,7 +48,64 @@ class AssetManagerTest:XCTestCase{
         XCTAssertFalse(expectedData.isEmpty)
     }
     
-    struct MockPin:Codable {
+    func test_ManagerDownloadsAndFIlterWithCursor(){
+        let cursor = Cursor(limit: 2) { (lhs, rhs) -> Bool in
+            guard let left = lhs as? MockPin, let right = rhs as? MockPin else {return false}
+            return left.id < right.id
+        }
+        var expectedResults:[MockPin] = []
+        
+        let downloader = MockDownloader()
+        let expectation = self.expectation(description: "test3")
+        let sut = AssetManager(with: AssetCache(name: "testCache", config: AssetCache.Configuration()), downloader: downloader)
+        
+        sut.download(from: Values.jsonLocation, for: [MockPin].self,with: cursor) { (data, err) in
+            if let data = data{
+                expectedResults.append(contentsOf: data)
+            }
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertEqual(expectedResults.count, 2)
+        
+    }
+    
+    func test_ManagerDownloadsAndFilterWithCursorWhenNextDataIsRequested(){
+        var cursor = Cursor(limit: 2) { (lhs, rhs) -> Bool in
+            guard let left = lhs as? MockPin, let right = rhs as? MockPin else {return false}
+            return left.id < right.id
+        }
+        var expectedResults:[MockPin] = []
+        
+        let downloader = MockDownloader()
+        let expectation = self.expectation(description: "test3")
+        let sut = AssetManager(with: AssetCache(name: "testCache", config: AssetCache.Configuration()), downloader: downloader)
+        
+        sut.download(from: Values.jsonLocation, for: [MockPin].self,with: cursor) { (data, err) in
+            if let data = data{
+                expectedResults.append(contentsOf: data)
+                cursor.next()
+                sut.download(from: Values.jsonLocation, for: [MockPin].self,with: cursor) { (data, err) in
+                    if let data = data{
+                        expectedResults.append(contentsOf: data)
+                    }
+                    expectation.fulfill()
+                }
+            }
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertEqual(expectedResults.count, 4)
+        
+    }
+    
+    
+    
+    struct MockPin:Codable{
+        
+        static func < (lhs: AssetManagerTest.MockPin, rhs: AssetManagerTest.MockPin) -> Bool {
+            return rhs.id < lhs.id
+        }
+        
         let id:String
         let color:String
     }

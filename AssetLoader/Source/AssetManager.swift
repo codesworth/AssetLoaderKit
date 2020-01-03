@@ -11,17 +11,18 @@ import UIKit
 
 open class AssetManager:NSObject{
     
-    private var downloader:AssetDownloader!
+    private var downloader:AssetDownloaderProtocol!
     var mainCache = AssetCache.main
     
     
     public typealias Operation = () -> Void
     public typealias ImageCompletionHandler = (UIImage?,Error?)->Void
+    private lazy var retainedSortedCodableItems:Array<Codable> = []
     func performOnManQueue(_ block:@escaping Operation){
         DispatchQueue.main.async {block()}
     }
     
-    var currentTasks:[Int:AssetDownloadTask] = [:]
+    var currentTasks:[Int:AssetDownloaderTaskProtocol] = [:]
     
     public init(with cache:AssetCache? = nil) {
         super.init()
@@ -30,6 +31,14 @@ open class AssetManager:NSObject{
         if let cache = cache{
             mainCache = cache
         }
+    }
+    
+    internal init(with cache:AssetCache? = nil, downloader:AssetDownloaderProtocol){
+        super.init()
+        self.downloader = downloader
+       if let cache = cache{
+           mainCache = cache
+       }
     }
     
     func getFromCache(_ key:String)->Data?{
@@ -62,7 +71,7 @@ open class AssetManager:NSObject{
             completion(UIImage(data: data),nil)
             return
         }
-        if let task = currentTasks[identifier]{
+        if let task = currentTasks[identifier] as? AssetDownloadTask{
             resumeDownloadFor(task: task, url: url, completion: completion)
             return
         }
@@ -75,7 +84,7 @@ open class AssetManager:NSObject{
     }
     
     
-    func resolve(url:URL, result:AssetDownloader.AssetResult, completion:@escaping ImageCompletionHandler){
+    func resolve(url:URL, result:AssetResult, completion:@escaping ImageCompletionHandler){
         switch result{
         case .failure(let err):
             AssetLoaderLogger.log(err: err, in: #function)
@@ -99,14 +108,13 @@ open class AssetManager:NSObject{
     /// - Parameters:
     ///  - url: url of the data to be downloaded
     ///  - type: The Explicit type of the Codable Data Type
-    ///  - cursor: A Cursor for sorting and fetching data in batches. Defaults to nil, all data is return instead
     ///  -  completion: Completion blocked passes in the codable type if any and an optional error
-    public func download<AnyCodable:Codable, CursorObject:Codable>(from url:URL,for type:AnyCodable.Type,with cursor:Cursor<CursorObject>? = nil, completion:@escaping (AnyCodable?, Error?) -> Void){
+    public func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type, completion:@escaping (AnyCodable?, Error?) -> Void){
         if let data = getFromCache(url.absoluteString){
             do {
                 let decoder = JSONDecoder()
                 let codable = try decoder.decode(type, from: data)
-                self.finishCompletion(cursor: cursor, from: codable, completion: completion)
+                completion(codable,nil)
             } catch let err {
                 AssetLoaderLogger.log(err: err, in: #function)
                 completion(nil,err)
@@ -133,28 +141,64 @@ open class AssetManager:NSObject{
         }
     }
     
-    
-    func finishCompletion<AnyCodable:Codable, CursorObject:Codable>(cursor:Cursor<CursorObject>?,from bulkData:AnyCodable, completion:@escaping (AnyCodable?, Error?) -> Void){
-        if let cursor = cursor{
-            guard let data = getDatawith(cursor: cursor, from: bulkData) else {
-                performOnManQueue {completion(nil,nil)}
-                return
+    /// Used For Downloading Any Data Type that has *Codable* conformance
+    /// - Parameters:
+    ///  - url: url of the data to be downloaded
+    ///  - type: The Explicit type of the Codable Data Type
+    ///  - cursor: A Cursor for sorting and fetching data in batches. Defaults to nil, all data is return instead
+    ///  -  completion: Completion blocked passes in the codable type if any and an optional error
+    public func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type,with cursor:Cursor, completion:@escaping (AnyCodable?, Error?) -> Void){
+        if !retainedSortedCodableItems.isEmpty && cursor.range.upperBound < retainedSortedCodableItems.count{
+            completion(retainedSortedCodableItems[cursor.startIndex..<cursor.endIndex] as? AnyCodable, nil)
+            return
+        }
+        if let data = getFromCache(url.absoluteString){
+            do {
+                let decoder = JSONDecoder()
+                let codable = try decoder.decode(type, from: data)
+                self.finishCompletion(cursor: cursor, from: codable, completion: completion)
+            } catch let err {
+                AssetLoaderLogger.log(err: err, in: #function)
+                completion(nil,err)
             }
-            performOnManQueue {completion(data,nil)}
         }else{
-            performOnManQueue {completion(bulkData,nil)}
+            downloader.download(from: url) {[weak self] result in
+                guard let self = self else {return}
+                switch result{
+                case .failure(let err):
+                    AssetLoaderLogger.log(err: err, in:#function)
+                    self.performOnManQueue {completion(nil,err)}
+                    break
+                case .success(let data):
+                    do {
+                        let decoder = JSONDecoder()
+                        let codable = try decoder.decode(type, from: data)
+                        
+                        self.finishCompletion(cursor: cursor, from: codable, completion: completion)
+                        self.mainCache.set(object: data, for: url.absoluteString)
+                    } catch let err {
+                        self.performOnManQueue {completion(nil,err)}
+                    }
+                }
+            }
         }
     }
     
     
-    func getDatawith<AnyCodable:Codable, CursorObject:Codable>(cursor:Cursor<CursorObject>,from bulkData:AnyCodable)->AnyCodable?{
-        guard let bulk = bulkData as? Array<Codable> else {return bulkData}
-        let sorted = bulk.sorted {
-            if let first = $0 as? CursorObject, let second = $1 as? CursorObject{
-                return cursor.sortOrder(first,second)
-            }
-            return false
+    func finishCompletion<AnyCodable:Codable>(cursor:Cursor, from bulkData:AnyCodable, completion:@escaping (AnyCodable?, Error?) -> Void){
+        
+        guard let data = getDatawith(cursor: cursor, from: bulkData) else {
+            performOnManQueue {completion(nil,nil)}
+            return
         }
+        performOnManQueue {completion(data,nil)}
+    }
+    
+    
+    func getDatawith<AnyCodable:Codable>(cursor:Cursor,from bulkData:AnyCodable)->AnyCodable?{
+        guard let bulk = bulkData as? Array<Codable> else {return bulkData}
+        let sorted =  bulk.sorted {return cursor.sortOrder($0,$1)}
+        retainedSortedCodableItems = sorted
         if cursor.range.endIndex < sorted.count{
             let start = cursor.range.startIndex
             let end = cursor.range.endIndex
@@ -206,7 +250,7 @@ open class AssetManager:NSObject{
 extension AssetManager:URLSessionDataDelegate{
     
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        guard let url = dataTask.originalRequest?.url, let task = currentTasks.first(where: {$1.task.originalRequest?.url == url}) else{return}
+        guard let url = dataTask.originalRequest?.url,let current = currentTasks as? [Int:AssetDownloadTask], let task = current.first(where: {($1).task.originalRequest?.url == url}) else{return}
         task.value.resumeData.append(data)
     }
 }

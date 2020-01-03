@@ -19,6 +19,9 @@
 		3858121923BE028F002CC9B0 /* AssetDownloaderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */; };
 		3858121B23BE03BF002CC9B0 /* AssetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */; };
 		3858121D23BE0605002CC9B0 /* AssetCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */; };
+		3893745D23BF8DAB00731E9D /* AssetDownloaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3893745C23BF8DAB00731E9D /* AssetDownloaderProtocol.swift */; };
+		3893745F23BF90C800731E9D /* MockDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3893745E23BF90C800731E9D /* MockDownloader.swift */; };
+		3893746123BF915000731E9D /* mindvalley.json in Resources */ = {isa = PBXBuildFile; fileRef = 3893746023BF915000731E9D /* mindvalley.json */; };
 		38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */; };
 		38CB96E323BF7F0800A861AB /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB96E223BF7F0800A861AB /* Cursor.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +52,9 @@
 		3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetDownloaderTest.swift; sourceTree = "<group>"; };
 		3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManagerTests.swift; sourceTree = "<group>"; };
 		3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCacheTest.swift; sourceTree = "<group>"; };
+		3893745C23BF8DAB00731E9D /* AssetDownloaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDownloaderProtocol.swift; sourceTree = "<group>"; };
+		3893745E23BF90C800731E9D /* MockDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloader.swift; sourceTree = "<group>"; };
+		3893746023BF915000731E9D /* mindvalley.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mindvalley.json; sourceTree = "<group>"; };
 		38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetLoaderLogger.swift; sourceTree = "<group>"; };
 		38CB96E223BF7F0800A861AB /* Cursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,11 +117,13 @@
 		385811FC23BD77B2002CC9B0 /* AssetLoaderTests */ = {
 			isa = PBXGroup;
 			children = (
+				3893746023BF915000731E9D /* mindvalley.json */,
 				3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */,
 				3858121623BE028F002CC9B0 /* TestValues.swift */,
 				385811FF23BD77B2002CC9B0 /* Info.plist */,
 				3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */,
 				3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */,
+				3893745E23BF90C800731E9D /* MockDownloader.swift */,
 			);
 			path = AssetLoaderTests;
 			sourceTree = "<group>";
@@ -131,6 +139,7 @@
 				3858121423BDF1DB002CC9B0 /* DownloaderTask.swift */,
 				38CB96C923BF6C0100A861AB /* AssetLoaderLogger.swift */,
 				38CB96E223BF7F0800A861AB /* Cursor.swift */,
+				3893745C23BF8DAB00731E9D /* AssetDownloaderProtocol.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -235,6 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3893746123BF915000731E9D /* mindvalley.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +263,7 @@
 				38CB96E323BF7F0800A861AB /* Cursor.swift in Sources */,
 				38CB96CA23BF6C0100A861AB /* AssetLoaderLogger.swift in Sources */,
 				3858121323BD77DE002CC9B0 /* NetworkError.swift in Sources */,
+				3893745D23BF8DAB00731E9D /* AssetDownloaderProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3858121823BE028F002CC9B0 /* TestValues.swift in Sources */,
+				3893745F23BF90C800731E9D /* MockDownloader.swift in Sources */,
 				3858121923BE028F002CC9B0 /* AssetDownloaderTest.swift in Sources */,
 				3858121B23BE03BF002CC9B0 /* AssetManagerTests.swift in Sources */,
 				3858121D23BE0605002CC9B0 /* AssetCacheTest.swift in Sources */,

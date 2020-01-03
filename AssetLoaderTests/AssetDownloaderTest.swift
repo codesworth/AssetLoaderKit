@@ -12,7 +12,7 @@ import XCTest
 class AssetDownloaderTest: XCTestCase {
 
     func test_downloadFromWorkingUrlWorks(){
-        let sut = AssetDownloader()
+        let sut = AssetDownloader(session: .shared)
         let url = URL(string:Values.workingUrl)!
         var expected:Data? = nil
         let expectation = self.expectation(description: "imageDownload")
@@ -30,7 +30,7 @@ class AssetDownloaderTest: XCTestCase {
     }
     
     func test_downloadFromWrongUrlDoesntWork(){
-        let sut = AssetDownloader()
+        let sut = AssetDownloader(session: .shared)
         let url = URL(string:Values.badUrl)!
         var expected:Data? = nil
         let expectation = self.expectation(description: "imageDownload")
@@ -47,8 +47,6 @@ class AssetDownloaderTest: XCTestCase {
         XCTAssertNil(expected)
     }
     
-    func test_ok(){
-        
-    }
+
 
 }

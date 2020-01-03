@@ -17,4 +17,6 @@ enum Values {
     static let cacheCapacity = 10
     static let randomCacheData = Data(repeating: 0, count: 100)
     static let testCacheID = "test_id"
+    static let jsonLocation = Bundle.init(for: AssetManagerTest.self).url(forResource: "mindvalley", withExtension: "json")!
+     
 }
