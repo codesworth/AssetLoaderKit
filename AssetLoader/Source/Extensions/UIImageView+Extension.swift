@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIImageView{
+public extension UIImageView{
     
     func setImage(for url:URL, placeHolder:UIImage? = nil){
         image = placeHolder

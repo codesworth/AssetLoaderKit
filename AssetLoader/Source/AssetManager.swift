@@ -17,12 +17,13 @@ open class AssetManager:NSObject{
     
     public typealias Operation = () -> Void
     public typealias ImageCompletionHandler = (UIImage?,Error?)->Void
+    public typealias TaskIdentifier = Int
     private lazy var retainedSortedCodableItems:Array<Codable> = []
     func performOnManQueue(_ block:@escaping Operation){
         DispatchQueue.main.async {block()}
     }
     
-    var currentTasks:[Int:AssetDownloaderTaskProtocol] = [:]
+    var currentTasks:[TaskIdentifier:AssetDownloaderTaskProtocol] = [:]
     
     public init(with cache:AssetCache? = nil) {
         super.init()
@@ -66,7 +67,7 @@ open class AssetManager:NSObject{
     ///  - identifier:Int A specified id for the download. Helpful for resuming after cancellation
     ///  -  completion: Completion blocked passes in the codable type if any and an optional error
     
-    public func downloadImage(for url:URL, identifier:Int, completion:@escaping ImageCompletionHandler){
+    public func downloadImage(for url:URL, identifier:TaskIdentifier, completion:@escaping ImageCompletionHandler){
         if let data = getFromCache(url.absoluteString){
             completion(UIImage(data: data),nil)
             return
@@ -77,6 +78,7 @@ open class AssetManager:NSObject{
         }
         let task = downloader.download(from: url) {[weak self] result in
             guard let self = self else {return}
+            self.resolve(url: url, result: result, completion: completion)
             self.currentTasks.removeValue(forKey: identifier)
             
         }
@@ -141,15 +143,15 @@ open class AssetManager:NSObject{
         }
     }
     
-    /// Used For Downloading Any Data Type that has *Codable* conformance
+    /// Used For Downloading Any Data Type that has *Array<Codable>* conformance.
     /// - Parameters:
     ///  - url: url of the data to be downloaded
     ///  - type: The Explicit type of the Codable Data Type
     ///  - cursor: A Cursor for sorting and fetching data in batches. Defaults to nil, all data is return instead
     ///  -  completion: Completion blocked passes in the codable type if any and an optional error
     public func download<AnyCodable:Codable>(from url:URL,for type:AnyCodable.Type,with cursor:Cursor, completion:@escaping (AnyCodable?, Error?) -> Void){
-        if !retainedSortedCodableItems.isEmpty && cursor.range.upperBound < retainedSortedCodableItems.count{
-            completion(retainedSortedCodableItems[cursor.startIndex..<cursor.endIndex] as? AnyCodable, nil)
+        if !retainedSortedCodableItems.isEmpty && cursor.range.endIndex <= retainedSortedCodableItems.count{
+            completion(Array(retainedSortedCodableItems[cursor.startIndex..<cursor.endIndex]) as? AnyCodable, nil)
             return
         }
         if let data = getFromCache(url.absoluteString){
@@ -188,7 +190,7 @@ open class AssetManager:NSObject{
     func finishCompletion<AnyCodable:Codable>(cursor:Cursor, from bulkData:AnyCodable, completion:@escaping (AnyCodable?, Error?) -> Void){
         
         guard let data = getDatawith(cursor: cursor, from: bulkData) else {
-            performOnManQueue {completion(nil,nil)}
+            performOnManQueue {completion(bulkData,nil)}
             return
         }
         performOnManQueue {completion(data,nil)}
@@ -196,20 +198,22 @@ open class AssetManager:NSObject{
     
     
     func getDatawith<AnyCodable:Codable>(cursor:Cursor,from bulkData:AnyCodable)->AnyCodable?{
-        guard let bulk = bulkData as? Array<Codable> else {return bulkData}
-        let sorted =  bulk.sorted {return cursor.sortOrder($0,$1)}
-        retainedSortedCodableItems = sorted
-        if cursor.range.endIndex < sorted.count{
+        guard var bulk = bulkData as? Array<Codable> else {return bulkData}
+        if let sortFunction = cursor.sortOrder{
+            bulk.sort{sortFunction($0,$1)}
+        }
+        retainedSortedCodableItems = bulk
+        if cursor.range.endIndex < bulk.count{
             let start = cursor.range.startIndex
             let end = cursor.range.endIndex
-            if let result = Array(sorted[start..<end]) as? AnyCodable{
+            if let result = Array(bulk[start..<end]) as? AnyCodable{
                 return result
             }else{
               return nil
             }
         }else{
-            guard cursor.range.startIndex < sorted.count else {return nil }
-            if let result = sorted[cursor.range.startIndex...] as? AnyCodable{
+            guard cursor.range.startIndex < bulk.count else {return nil }
+            if let result = Array(bulk[cursor.range.startIndex...]) as? AnyCodable{
                 return result
             }
             return nil

@@ -15,11 +15,11 @@ public struct Cursor{
     
     public typealias SortOrder = (Any,Any) -> Bool
     let limit:Int
-    let sortOrder:SortOrder
+    let sortOrder:SortOrder?
     var range:CountableRange<Int>
     public var rotations:Int = 0
     
-    public init(limit:Int,sortOrder:@escaping SortOrder) {
+    public init(limit:Int,sortOrder:SortOrder? = nil) {
         self.limit = limit
         self.sortOrder = sortOrder
         range = 0..<limit

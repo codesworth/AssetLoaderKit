@@ -11,11 +11,20 @@ import Foundation
 public struct NetworkError:Error, ExpressibleByStringLiteral {
     
     public init(stringLiteral value: String) {
-        localizedDescription = value
+        customDescription = value
     }
-    public var localizedDescription: String
+    public var customDescription: String
+    public var code:Int = 1
     
-    public init(_ err:Error?) {
-        localizedDescription = err?.localizedDescription ?? "unknown Error occurred"
+    public init(_ err:Error?, code:Int = 1) {
+        customDescription = err?.localizedDescription ?? "unknown Error occurred"
+    }
+    
+    public init(stringLiteral value: String, code:Int) {
+        customDescription = value
+    }
+    
+    public var localizedDescription: String{
+        return customDescription
     }
 }

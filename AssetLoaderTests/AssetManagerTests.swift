@@ -29,6 +29,30 @@ class AssetManagerTest:XCTestCase{
         XCTAssertNotNil(expectedImage)
     }
     
+    func test_MangerDownloadsAndCachesSmallImages(){
+        var expectedImage:UIImage?
+        let expectation = self.expectation(description: "test2")
+        sut.downloadImage(for: makeUrlFrom(Values.workingsmallImageUrl)) { (image, err) in
+            expectedImage = image
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 30, handler: nil)
+        XCTAssertNotNil(expectedImage)
+    }
+    
+    func test_MangerDownloadsAndCachesSmallImagesWithExplicitTaskIdentifier(){
+        var expectedImage:UIImage?
+        let expectation = self.expectation(description: "test2")
+        sut.downloadImage(for: makeUrlFrom(Values.workingsmallImageUrl), identifier: 1) { (image, err) in
+            expectedImage = image
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 30, handler: nil)
+        XCTAssertNotNil(expectedImage)
+    }
+    
     func makeUrlFrom(_ string:String)->URL{
         return URL(string: string)!
     }
@@ -49,24 +73,25 @@ class AssetManagerTest:XCTestCase{
     }
     
     func test_ManagerDownloadsAndFIlterWithCursor(){
-        let cursor = Cursor(limit: 2) { (lhs, rhs) -> Bool in
-            guard let left = lhs as? MockPin, let right = rhs as? MockPin else {return false}
+        let cursor = Cursor(limit: 10) { (lhs, rhs) -> Bool in
+            guard let left = lhs as? MindValleyPin, let right = rhs as? MindValleyPin else {return false}
             return left.id < right.id
         }
-        var expectedResults:[MockPin] = []
+        var expectedResults:[MindValleyPin] = []
         
         let downloader = MockDownloader()
         let expectation = self.expectation(description: "test3")
         let sut = AssetManager(with: AssetCache(name: "testCache", config: AssetCache.Configuration()), downloader: downloader)
         
-        sut.download(from: Values.jsonLocation, for: [MockPin].self,with: cursor) { (data, err) in
+        sut.download(from: Values.jsonLocation, for: [MindValleyPin].self,with: cursor) { (data, err) in
+            print(err?.localizedDescription ?? "Unknown")
             if let data = data{
                 expectedResults.append(contentsOf: data)
             }
             expectation.fulfill()
         }
         waitForExpectations(timeout: 10, handler: nil)
-        XCTAssertEqual(expectedResults.count, 2)
+        XCTAssertEqual(expectedResults.count, 10)
         
     }
     
