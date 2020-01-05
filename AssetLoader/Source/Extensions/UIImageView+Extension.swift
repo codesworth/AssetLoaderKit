@@ -12,11 +12,11 @@ public extension UIImageView{
     
     func setImage(for url:URL, placeHolder:UIImage? = nil){
         image = placeHolder
-        AssetManager().downloadImage(for: url) {[weak self] image, err in
+        AssetManager().downloadImage(for: url) { image, err in
             if let err = err{
                 AssetLoaderLogger.log(err: err, in: "UIImageView.setImage(for:) extension")
             }
-            self?.image = image
+            self.image = image
         }
     }
     
