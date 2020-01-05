@@ -34,6 +34,20 @@
 			remoteGlobalIDString = 385811EE23BD77B2002CC9B0;
 			remoteInfo = AssetLoader;
 		};
+		3865F68623C26D4E0050DDB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3865F68123C26D4D0050DDB7 /* ExampleApp.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3865F65C23C26D4B0050DDB7;
+			remoteInfo = ExampleApp;
+		};
+		3865F68823C26D4E0050DDB7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3865F68123C26D4D0050DDB7 /* ExampleApp.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3865F67223C26D4D0050DDB7;
+			remoteInfo = ExampleAppTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +66,7 @@
 		3858121723BE028F002CC9B0 /* AssetDownloaderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetDownloaderTest.swift; sourceTree = "<group>"; };
 		3858121A23BE03BF002CC9B0 /* AssetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManagerTests.swift; sourceTree = "<group>"; };
 		3858121C23BE0605002CC9B0 /* AssetCacheTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCacheTest.swift; sourceTree = "<group>"; };
+		3865F68123C26D4D0050DDB7 /* ExampleApp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ExampleApp.xcodeproj; path = ExampleApp/ExampleApp.xcodeproj; sourceTree = "<group>"; };
 		3893745C23BF8DAB00731E9D /* AssetDownloaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDownloaderProtocol.swift; sourceTree = "<group>"; };
 		3893745E23BF90C800731E9D /* MockDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloader.swift; sourceTree = "<group>"; };
 		3893746023BF915000731E9D /* mindvalley.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mindvalley.json; sourceTree = "<group>"; };
@@ -89,6 +104,7 @@
 		385811E523BD77B1002CC9B0 = {
 			isa = PBXGroup;
 			children = (
+				3865F68123C26D4D0050DDB7 /* ExampleApp.xcodeproj */,
 				385811F123BD77B2002CC9B0 /* AssetLoader */,
 				385811FC23BD77B2002CC9B0 /* AssetLoaderTests */,
 				385811F023BD77B2002CC9B0 /* Products */,
@@ -109,7 +125,6 @@
 			children = (
 				385811F223BD77B2002CC9B0 /* AssetLoader.h */,
 				3858120923BD77DD002CC9B0 /* Source */,
-				385811F323BD77B2002CC9B0 /* Info.plist */,
 			);
 			path = AssetLoader;
 			sourceTree = "<group>";
@@ -131,6 +146,7 @@
 		3858120923BD77DD002CC9B0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				385811F323BD77B2002CC9B0 /* Info.plist */,
 				382FF74023BEC51D004DCF5A /* Extensions */,
 				3858120A23BD77DE002CC9B0 /* AssetDownloader.swift */,
 				3858120B23BD77DE002CC9B0 /* AssetCache.swift */,
@@ -142,6 +158,15 @@
 				3893745C23BF8DAB00731E9D /* AssetDownloaderProtocol.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		3865F68223C26D4D0050DDB7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3865F68723C26D4E0050DDB7 /* ExampleApp.app */,
+				3865F68923C26D4E0050DDB7 /* ExampleAppTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,6 +249,12 @@
 			mainGroup = 385811E523BD77B1002CC9B0;
 			productRefGroup = 385811F023BD77B2002CC9B0 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3865F68223C26D4D0050DDB7 /* Products */;
+					ProjectRef = 3865F68123C26D4D0050DDB7 /* ExampleApp.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				385811EE23BD77B2002CC9B0 /* AssetLoader */,
@@ -231,6 +262,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3865F68723C26D4E0050DDB7 /* ExampleApp.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = ExampleApp.app;
+			remoteRef = 3865F68623C26D4E0050DDB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3865F68923C26D4E0050DDB7 /* ExampleAppTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ExampleAppTests.xctest;
+			remoteRef = 3865F68823C26D4E0050DDB7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		385811ED23BD77B2002CC9B0 /* Resources */ = {
@@ -341,6 +389,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = AssetLoader/Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -398,6 +447,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = AssetLoader/Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -419,7 +469,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AssetLoader/Info.plist;
+				INFOPLIST_FILE = AssetLoader/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -446,7 +496,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = AssetLoader/Info.plist;
+				INFOPLIST_FILE = AssetLoader/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
