@@ -21,7 +21,7 @@ class AssetDownloader:AssetDownloaderProtocol{
     
     @discardableResult
     func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloaderTaskProtocol{
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         
         let dataTask = session.downloadTask(with: request) { (url, _, err) in
             guard let url = url else {
@@ -42,23 +42,6 @@ class AssetDownloader:AssetDownloaderProtocol{
         return task
     }
     
-    func resumeDownload(with task:AssetDownloadTask, completion:@escaping AssetDownloadCompletionHandler){
-        let data = task.resumeData
-        session.downloadTask(withResumeData: data) { (url, _, err) in
-            guard let url = url else {
-                AssetLoaderLogger.log(err:NetworkError(err), in: #function)
-                completion(.failure(NetworkError(err)))
-                return
-            }
-            do{
-                let data = try Data(contentsOf: url)
-                completion(.success(data))
-            }catch let err{
-                AssetLoaderLogger.log(err: err, in: #function)
-                completion(.failure(NetworkError(err)))
-            }
-        }
-    }
 }
 
 

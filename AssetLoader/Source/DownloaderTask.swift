@@ -15,8 +15,6 @@ open class AssetDownloadTask:NSObject, AssetDownloaderTaskProtocol{
     let task:URLSessionDownloadTask
     
     
-    public var resumeData = Data()
-    
     init(task:URLSessionDownloadTask) {
         self.task = task
         

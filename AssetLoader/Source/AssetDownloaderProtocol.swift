@@ -25,5 +25,4 @@ public protocol AssetDownloaderProtocol {
     @discardableResult
     func download(from url:URL,completion:@escaping AssetDownloadCompletionHandler)->AssetDownloaderTaskProtocol
     
-     func resumeDownload(with task:AssetDownloadTask, completion:@escaping AssetDownloadCompletionHandler)
 }
