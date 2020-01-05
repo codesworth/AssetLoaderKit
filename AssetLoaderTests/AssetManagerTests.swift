@@ -124,6 +124,25 @@ class AssetManagerTest:XCTestCase{
     }
     
     
+    func test_ManagerDownloadsResourceWithTaskIdentifier(){
+        var expectedData:Data?
+        
+        let expectation = self.expectation(description: "item3")
+        
+        sut.downloadItem(from: URL(string: Values.pinUrl)!, identifier: 9) { (result) in
+            switch result{
+            case .failure(_):
+                break
+            case .success(let data):
+                expectedData = data
+            }
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 20, handler: nil)
+        XCTAssertNotNil(expectedData)
+    }
+    
+    
     
     struct MockPin:Codable{
         

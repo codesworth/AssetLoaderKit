@@ -27,7 +27,7 @@ open class AssetManager:NSObject{
     
     public init(with cache:AssetCache? = nil) {
         super.init()
-        let session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .current)
+        let session = URLSession(configuration: .ephemeral)
         downloader = AssetDownloader(session: session)
         if let cache = cache{
             mainCache = cache
@@ -72,10 +72,6 @@ open class AssetManager:NSObject{
             completion(UIImage(data: data),nil)
             return
         }
-        if let task = currentTasks[identifier] as? AssetDownloadTask{
-            resumeDownloadFor(task: task, url: url, completion: completion)
-            return
-        }
         let task = downloader.download(from: url) {[weak self] result in
             guard let self = self else {return}
             self.resolve(url: url, result: result, completion: completion)
@@ -99,11 +95,6 @@ open class AssetManager:NSObject{
         }
     }
     
-    func resumeDownloadFor(task:AssetDownloadTask, url:URL, completion:@escaping ImageCompletionHandler){
-        downloader.resumeDownload(with: task) {[weak self] result in
-            self?.resolve(url:url, result: result, completion: completion)
-        }
-    }
     
     
     /// Used For Downloading Any Data Type that has *Codable* conformance
@@ -187,6 +178,8 @@ open class AssetManager:NSObject{
     }
     
     
+    
+    
     func finishCompletion<AnyCodable:Codable>(cursor:Cursor, from bulkData:AnyCodable, completion:@escaping (AnyCodable?, Error?) -> Void){
         
         guard let data = getDatawith(cursor: cursor, from: bulkData) else {
@@ -239,22 +232,32 @@ open class AssetManager:NSObject{
                 group.leave()
             }
         }
+       
         
     }
     
-    public func cancel(for identifier:Int){
+    /// Cancel An Existing Download Task
+    /// - Parameters:
+    ///  - identifier: A TaskIdentifier for identifying specific task
+    public func cancel(for identifier:TaskIdentifier){
         if let task = currentTasks[identifier]{
             task.cancel()
         }
     }
     
-}
-
-
-extension AssetManager:URLSessionDataDelegate{
     
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        guard let url = dataTask.originalRequest?.url,let current = currentTasks as? [Int:AssetDownloadTask], let task = current.first(where: {($1).task.originalRequest?.url == url}) else{return}
-        task.value.resumeData.append(data)
+    public func downloadItem(from url:URL, identifier:TaskIdentifier, completion:@escaping AssetDownloadCompletionHandler){
+        if let data = getFromCache(url.absoluteString){
+            completion(.success(data))
+            return
+        }
+        let task = downloader.download(from: url) {[weak self] result in
+            guard let self = self else {return}
+            self.currentTasks.removeValue(forKey: identifier)
+            completion(result)
+        }
+        currentTasks.updateValue(task, forKey: identifier)
     }
+    
+    
 }
