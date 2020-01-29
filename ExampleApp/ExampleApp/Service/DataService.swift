@@ -6,7 +6,7 @@
 //  Copyright © 2020 Shadrach Mensah. All rights reserved.
 //
 
-import AssetLoader
+import AssertLoaderKit
 
 protocol DataServiceProtocol {
     associatedtype DataType

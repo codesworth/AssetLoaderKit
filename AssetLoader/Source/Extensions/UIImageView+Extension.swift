@@ -12,7 +12,8 @@ public extension UIImageView{
     
     func setImage(for url:URL, placeHolder:UIImage? = nil){
         image = placeHolder
-        AssetManager().downloadImage(for: url) { image, err in
+        
+        AssetManager.global.downloadImage(for: url) { image, err in
             if let err = err{
                 AssetLoaderLogger.log(err: err, in: "UIImageView.setImage(for:) extension")
             }

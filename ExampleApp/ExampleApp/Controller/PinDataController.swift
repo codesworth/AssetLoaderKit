@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import AssetLoader
+import AssertLoaderKit
+
 
 
 protocol PinDataControllerDelegate:class {

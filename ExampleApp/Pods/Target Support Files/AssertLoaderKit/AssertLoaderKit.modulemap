@@ -1,0 +1,6 @@
+framework module AssertLoaderKit {
+  umbrella header "AssertLoaderKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

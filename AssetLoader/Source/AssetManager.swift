@@ -14,7 +14,7 @@ open class AssetManager:NSObject{
     private var downloader:AssetDownloaderProtocol!
     var mainCache = AssetCache.main
     
-    
+    public static let global = AssetManager()
     public typealias Operation = () -> Void
     public typealias ImageCompletionHandler = (UIImage?,Error?)->Void
     public typealias TaskIdentifier = Int

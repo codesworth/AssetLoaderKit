@@ -1,0 +1,16 @@
+PODS:
+  - AssertLoaderKit (1.0.0)
+
+DEPENDENCIES:
+  - AssertLoaderKit (from `../`)
+
+EXTERNAL SOURCES:
+  AssertLoaderKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AssertLoaderKit: af6f78f70350d999e106da757761df41619bfa08
+
+PODFILE CHECKSUM: 1f2a4da9717113fd794f7b4c81af9c70caa555f0
+
+COCOAPODS: 1.7.3

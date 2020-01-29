@@ -70,9 +70,9 @@ class PhotoFullScreenVC:UIViewController{
         if let profileUrl = pin.user.profileThumbNailUrl{
             userProfileImageView.setImage(for: profileUrl)
         }
-//        if let fullUrl = pin.urls.fullUrl{
-//            fullScreenImageView.setImage(for: fullUrl, placeHolder: placeHolderImage)
-//        }
+        if let fullUrl = pin.urls.fullUrl{
+            fullScreenImageView.setImage(for: fullUrl, placeHolder: placeHolderImage)
+        }
         
         
         

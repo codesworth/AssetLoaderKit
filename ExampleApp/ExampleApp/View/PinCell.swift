@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AssetLoader
+import AssertLoaderKit
 
 class PinCell: UICollectionViewCell,Identity {
     
